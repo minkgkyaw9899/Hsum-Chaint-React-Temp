@@ -1,0 +1,37 @@
+name: TEST
+
+on:
+  pull_request_target:
+    branches: [develop]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run tests
+        run: bun run test:ci
+
+  notify-test-failure:
+    needs: tests
+    if: failure()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        ❌ *Pipeline Failed — Tests*
+        📦 `${{ github.repository }}`
+        👤 ${{ github.actor }}
+        📌 ${{ github.event.pull_request.title }}
+        🌿 `${{ github.head_ref }}` → `${{ github.base_ref }}`
+        🔗 ${{ github.event.pull_request.html_url }}

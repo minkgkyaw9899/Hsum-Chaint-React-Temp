@@ -1,0 +1,45 @@
+# .github/workflows/pr-title-check.yml
+name: PR Title Check
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize]
+    branches: [main, staging, develop]
+
+jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title (Conventional Commits)
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          PATTERN="^(feat|fix|docs|style|refactor|perf|test|chore|revert)(\(.+\))?: .{1,}"
+
+          echo "PR Title: $TITLE"
+
+          if [[ ! "$TITLE" =~ $PATTERN ]]; then
+            echo "❌ Invalid PR title format!"
+            echo ""
+            echo "✅ Expected format: type(scope): description"
+            echo "   Examples:"
+            echo "   feat(auth): add login screen"
+            echo "   fix(api): handle null response"
+            echo "   chore: update dependencies"
+            exit 1
+          fi
+
+          echo "✅ PR title is valid!"
+
+  notify-failure:
+    needs: check-title
+    if: failure()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        ⚠️ *Pipeline Failed — PR Title Check*
+        📦 `${{ github.repository }}`
+        👤 ${{ github.actor }}
+        📌 "${{ github.event.pull_request.title }}"
+        💡 Format: `type(scope): description`
+        🔗 ${{ github.event.pull_request.html_url }}

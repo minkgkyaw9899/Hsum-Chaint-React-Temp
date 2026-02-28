@@ -1,0 +1,121 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main, staging]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image tag
+        id: meta
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          else
+            echo "tag=staging" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/one-project-one-month/hsumchaint_next:${{ steps.meta.outputs.tag }}
+
+  deploy-production:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Vultr
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VULTR_HOST }}
+          username: ${{ secrets.VULTR_USER }}
+          key: ${{ secrets.VULTR_SSH_KEY }}
+          script: |
+            cd /var/www/hsum-chaint-next
+            git pull origin main
+            docker pull ghcr.io/one-project-one-month/hsumchaint_next:latest
+            docker compose up -d
+            docker image prune -f
+
+  notify-production-success:
+    needs: deploy-production
+    if: success()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        🚀 *Production Deployed*
+        📦 `${{ github.repository }}`
+        👤 ${{ github.actor }}
+        💬 ${{ github.event.head_commit.message }}
+
+  notify-production-failure:
+    needs: deploy-production
+    if: failure()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        ❌ *Production Deploy Failed*
+        📦 `${{ github.repository }}`
+        👤 ${{ github.actor }}
+        💬 ${{ github.event.head_commit.message }}
+
+  deploy-staging:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Vultr
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VULTR_HOST }}
+          username: ${{ secrets.VULTR_USER }}
+          key: ${{ secrets.VULTR_SSH_KEY }}
+          script: |
+            cd /var/www/hsum-chaint-next-staging
+            git pull origin staging
+            docker pull ghcr.io/one-project-one-month/hsumchaint_next:staging
+            docker compose -f docker-compose.staging.yml up -d
+            docker image prune -f
+
+  notify-staging-success:
+    needs: deploy-staging
+    if: success()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        🧪 *Staging Deployed*
+        📦 `${{ github.repository }}`
+        👤 ${{ github.actor }}
+        💬 ${{ github.event.head_commit.message }}
+
+  notify-staging-failure:
+    needs: deploy-staging
+    if: failure()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        ❌ *Staging Deploy Failed*
+        📦 `${{ github.repository }}`
+        👤 ${{ github.actor }}
+        💬 ${{ github.event.head_commit.message }}

@@ -1,0 +1,8 @@
+services:
+  app:
+    image: ghcr.io/one-project-one-month/hsumchaint_next:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
