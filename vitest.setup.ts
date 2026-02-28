@@ -12,7 +12,7 @@ vi.mock('next/font/google', () => ({
   Geist_Mono: () => ({ variable: '--font-geist-mono' }),
 }));
 
-/* eslint-disable @next/next/no-img-element */
+ 
 vi.mock('next/image', () => ({
   default: ({
     src,
@@ -26,7 +26,7 @@ vi.mock('next/image', () => ({
     height?: number;
   }) => createElement('img', { src, alt, width, height }),
 }));
-/* eslint-enable @next/next/no-img-element */
+ 
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({

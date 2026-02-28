@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: hsum-chaint-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount the current directory to /app for live code changes
+      - .:/app
+      # Anonymous volumes to prevent local host modules and build artifacts from overriding container ones
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      # Use polling if file changes are not detected (common in some Docker setups)
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true

@@ -18,7 +18,8 @@ jobs:
         <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Title:</b> ${{ github.event.pull_request.title }}
-        <b>Branch:</b> `${{ github.head_ref }}` → `${{ github.base_ref }}`
+        <b>Branch:</b> <code>${{ github.head_ref }}</code> → <code>${{ github.base_ref }}</code>
+
   pr-updated:
     if: github.event.action == 'synchronize'
     uses: ./.github/workflows/reusable-telegram.yml
@@ -26,11 +27,11 @@ jobs:
     with:
       format: HTML
       message: |
-        <b>🔄 *PR Updated*</b>
-        <b>Project:</b> `${{ github.repository }}`
+        <b>🔄 PR Updated</b>
+        <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Title:</b> ${{ github.event.pull_request.title }}
-        <b>Branch:</b> `${{ github.head_ref }}` → `${{ github.base_ref }}`
+        <b>Branch:</b> <code>${{ github.head_ref }}</code> → <code>${{ github.base_ref }}</code>
 
   pr-merged:
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
@@ -39,9 +40,9 @@ jobs:
     with:
       format: HTML
       message: |
-        <b>🔔 *PR Merged*</b>
+        <b>🔔 PR Merged</b>
 
         <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Title:</b> ${{ github.event.pull_request.title }}
-        <b>Branch:</b> `${{ github.head_ref }}` → `${{ github.base_ref }}`
+        <b>Branch:</b> <code>${{ github.head_ref }}</code> → <code>${{ github.base_ref }}</code>
