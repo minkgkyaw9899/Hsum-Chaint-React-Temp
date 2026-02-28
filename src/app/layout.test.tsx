@@ -17,7 +17,7 @@ describe('RootLayout', () => {
         <div>Test</div>
       </RootLayout>,
     );
-    const body = document.body;
+    const body = screen.getByTestId('body-root');
     expect(body).toHaveClass('--font-geist-sans');
     expect(body).toHaveClass('--font-geist-mono');
     expect(body).toHaveClass('antialiased');
@@ -29,7 +29,7 @@ describe('RootLayout', () => {
         <div>Test</div>
       </RootLayout>,
     );
-    const html = document.documentElement;
+    const html = screen.getByTestId('html-root');
     expect(html).toHaveAttribute('lang', 'en');
   });
 });

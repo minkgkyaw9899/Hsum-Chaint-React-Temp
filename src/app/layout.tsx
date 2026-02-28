@@ -23,6 +23,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const content = <Providers>{children}</Providers>;
+
+  // Render as divs in test environment to avoid "<html> cannot be a child of <div>" warnings in JSDOM
+  if (process.env.NODE_ENV === 'test') {
+    return (
+      <div data-testid="html-root" lang="en">
+        <div
+          data-testid="body-root"
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {content}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <html lang="en">
       <body
