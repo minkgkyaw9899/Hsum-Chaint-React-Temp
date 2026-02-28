@@ -28,7 +28,7 @@ jobs:
       format: HTML
       message: |
         <b>🔄 PR Updated</b>
-        <b>Project:</b> <code>${{ github.repository }}</code>
+        <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Title:</b> ${{ github.event.pull_request.title }}
         <b>Branch:</b> <code>${{ github.head_ref }}</code> → <code>${{ github.base_ref }}</code>

@@ -47,3 +47,17 @@ jobs:
           fi
 
           echo "✅ PR target is valid!"
+
+  notify-failure:
+    needs: check-pr-target
+    if: failure()
+    uses: ./.github/workflows/reusable-telegram.yml
+    secrets: inherit
+    with:
+      message: |
+        <b>❌ Branch Policy Failed</b>
+
+        <b>Project:</b> NextJS
+        <b>Actor:</b> ${{ github.actor }}
+        <b>Branch:</b> `${{ github.head_ref }}` → `${{ github.base_ref }}`
+        <b>Reason:</b> Invalid PR target branch.
