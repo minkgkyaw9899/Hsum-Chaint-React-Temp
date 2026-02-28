@@ -43,3 +43,4 @@ jobs:
         <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Title:</b> ${{ github.event.pull_request.title }}
+        <b>Please follow the Conventional Commits format.</b>
