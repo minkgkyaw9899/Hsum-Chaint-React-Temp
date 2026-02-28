@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/minkgyaw9899/hsumchaint_next:staging
+    image: ghcr.io/minkgkyaw9899/hsumchaint_next:staging
     restart: always
     ports:
       - "3001:3000"
