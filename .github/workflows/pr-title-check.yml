@@ -2,8 +2,8 @@
 name: PR Title Check
 
 on:
-  pull_request_target:
-    types: [opened, edited, synchronize]
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
     branches: [main, staging, develop]
 
 jobs:
