@@ -35,6 +35,10 @@ const api = ky.create({
         if (process.env.NODE_ENV === 'development') {
           console.log(
             `%c[API] %c${request.method} %c${request.url} %c${response.status}`,
+            'color: #6366f1; font-weight: bold;', // [API]
+            'color: #10b981; font-weight: bold;', // Method
+            'color: #6b7280;', // URL
+            `color: ${response.ok ? '#10b981' : '#ef4444'}; font-weight: bold;`, // Status
           );
         }
 

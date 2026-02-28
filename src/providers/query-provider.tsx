@@ -5,14 +5,14 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { queryClient } from '../lib/query-client';
+import { createQueryClient, queryClient } from '../lib/query-client';
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
   if (isServer) {
     // Server: always make a new query client
-    return queryClient;
+    return createQueryClient();
   } else {
     // Browser: make a new query client if we don't already have one
     // This is very important, so we don't re-make a new client if React
