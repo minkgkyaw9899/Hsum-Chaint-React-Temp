@@ -36,10 +36,10 @@ jobs:
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
+      format: HTML
       message: |
-        ⚠️ *Pipeline Failed — PR Title Check*
-        📦 `${{ github.repository }}`
-        👤 ${{ github.actor }}
-        📌 "${{ github.event.pull_request.title }}"
-        💡 Format: `type(scope): description`
-        🔗 ${{ github.event.pull_request.html_url }}
+        <b>❌ PR Title Check Failed</b>
+
+        <b>Project:</b> NextJS
+        <b>Actor:</b> ${{ github.actor }}
+        <b>Title:</b> ${{ github.event.pull_request.title }}
