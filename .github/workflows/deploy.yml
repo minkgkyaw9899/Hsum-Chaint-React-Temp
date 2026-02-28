@@ -115,7 +115,7 @@ jobs:
         <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Commit:</b> <code>${{ github.event.head_commit.message }}</code>
-        <b>URL:</b> http://${{ vars.VULTR_HOST_URL }}:8082
+        <b>URL:</b> http://${{ vars.VULTR_HOST_URL }}:8081
 
   notify-staging-failure:
     needs: deploy-staging
