@@ -61,13 +61,13 @@ jobs:
     secrets: inherit
     with:
       message: |
-        <b>✅✅ Deployment Successful ✅✅</b>
+        <b>✅ Production Deployment Successful</b>
 
         <b>Environment:</b> Production
         <b>Project:</b> NextJS
         <b>Actor:</b> ${{ github.actor }}
         <b>Commit:</b> <code>${{ github.event.head_commit.message }}</code>
-        <b>URL:</b> http://${{ vars.VULTR_HOST_URL }}:8082
+        <b>URL:</b> http://${{ vars.VULTR_HOST_URL }}
 
   notify-production-failure:
     needs: deploy-production
@@ -76,7 +76,7 @@ jobs:
     secrets: inherit
     with:
       message: |
-        <b>❌❌ Deployment Failed ❌❌</b>
+        <b>❌ Production Deployment Failed</b>
 
         <b>Environment:</b> Production
         <b>Project:</b> NextJS
@@ -109,7 +109,7 @@ jobs:
     with:
       format: HTML
       message: |
-        <b>✅✅ Deployment Successful ✅✅</b>
+        <b>✅ Staging Deployment Successful</b>
 
         <b>Environment:</b> Staging
         <b>Project:</b> NextJS
@@ -124,7 +124,7 @@ jobs:
     secrets: inherit
     with:
       message: |
-        <b>❌❌ Deployment Failed ❌❌</b>
+        <b>❌ Staging Deployment Failed</b>
 
         <b>Environment:</b> Staging
         <b>Project:</b> NextJS
