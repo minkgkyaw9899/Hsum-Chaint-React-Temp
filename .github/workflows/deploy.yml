@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/one-project-one-month/hsumchaint_next:${{ steps.meta.outputs.tag }}
+          tags: ghcr.io/minkgyaw9899/hsumchaint_next:${{ steps.meta.outputs.tag }}
 
   deploy-production:
     needs: build-and-push
@@ -50,13 +50,13 @@ jobs:
           script: |
             cd /var/www/hsum-chaint-next
             git pull origin main
-            docker pull ghcr.io/one-project-one-month/hsumchaint_next:latest
+            docker pull ghcr.io/minkgyaw9899/hsumchaint_next:latest
             docker compose up -d
             docker image prune -f
 
   notify-production-success:
     needs: deploy-production
-    if: success()
+    if: success() && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
@@ -68,7 +68,7 @@ jobs:
 
   notify-production-failure:
     needs: deploy-production
-    if: failure()
+    if: failure() && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
@@ -92,13 +92,13 @@ jobs:
           script: |
             cd /var/www/hsum-chaint-next-staging
             git pull origin staging
-            docker pull ghcr.io/one-project-one-month/hsumchaint_next:staging
+            docker pull ghcr.io/minkgyaw9899/hsumchaint_next:staging
             docker compose -f docker-compose.staging.yml up -d
             docker image prune -f
 
   notify-staging-success:
     needs: deploy-staging
-    if: success()
+    if: success() && github.ref == 'refs/heads/staging'
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
@@ -110,7 +110,7 @@ jobs:
 
   notify-staging-failure:
     needs: deploy-staging
-    if: failure()
+    if: failure() && github.ref == 'refs/heads/staging'
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
