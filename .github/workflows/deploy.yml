@@ -107,7 +107,7 @@ jobs:
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
-      parse_mode: HTML
+      format: HTML
       message: |
         <b>✅✅ Deployment Successful ✅✅</b>
 
