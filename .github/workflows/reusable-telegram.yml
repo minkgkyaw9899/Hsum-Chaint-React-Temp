@@ -6,6 +6,10 @@ on:
       message:
         required: true
         type: string
+      parse_mode:
+        required: false
+        type: string
+        default: 'HTML'
     secrets:
       TELEGRAM_CHAT_ID:
         required: true
@@ -24,3 +28,4 @@ jobs:
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           message_thread_id: ${{ secrets.TELEGRAM_GITHUB_TOPIC_ID }}
           message: ${{ inputs.message }}
+          parse_mode: ${{ inputs.parse_mode }}

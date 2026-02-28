@@ -61,10 +61,14 @@ jobs:
     secrets: inherit
     with:
       message: |
-        🚀 *Production Deployed*
-        📦 `${{ github.repository }}`
-        👤 ${{ github.actor }}
-        💬 ${{ github.event.head_commit.message }}
+        <div>
+          <h4>✅✅ Deployment Successful ✅✅</h4>
+          <p>Environment: <b>Staging</b></p>
+          <p>Project: <b>NextJS</b></p>
+          <p>Actor: <b>${{ github.actor }}</b></p>
+          <p>Commit Message: <b>${{ github.event.head_commit.message }}</b></p>
+          <p>URL: <b>http://${{ secrets.VULTR_HOST }}</b></p>
+        </div>
 
   notify-production-failure:
     needs: deploy-production
@@ -73,10 +77,13 @@ jobs:
     secrets: inherit
     with:
       message: |
-        ❌ *Production Deploy Failed*
-        📦 `${{ github.repository }}`
-        👤 ${{ github.actor }}
-        💬 ${{ github.event.head_commit.message }}
+        <div>
+          <h4>❌❌ Deployment Failed ❌❌</h4>
+          <p>Environment: <b>Production</b></p>
+          <p>Project: <b>NextJS</b></p>
+          <p>Actor: <b>${{ github.actor }}</b></p>
+          <p>Commit Message: <b>${{ github.event.head_commit.message }}</b></p>
+        </div>
 
   deploy-staging:
     needs: build-and-push
@@ -102,11 +109,16 @@ jobs:
     uses: ./.github/workflows/reusable-telegram.yml
     secrets: inherit
     with:
+      parse_mode: 'HTML'
       message: |
-        🧪 *Staging Deployed*
-        📦 `${{ github.repository }}`
-        👤 ${{ github.actor }}
-        💬 ${{ github.event.head_commit.message }}
+        <div>
+          <h4>✅✅ Deployment Successful ✅✅</h4>
+          <p>Environment: <b>Staging</b></p>
+          <p>Project: <b>NextJS</b></p>
+          <p>Actor: <b>${{ github.actor }}</b></p>
+          <p>Commit Message: <b>${{ github.event.head_commit.message }}</b></p>
+          <p>URL: <b>http://${{ secrets.VULTR_HOST }}:8082</b></p>
+        </div>
 
   notify-staging-failure:
     needs: deploy-staging
@@ -115,7 +127,10 @@ jobs:
     secrets: inherit
     with:
       message: |
-        ❌ *Staging Deploy Failed*
-        📦 `${{ github.repository }}`
-        👤 ${{ github.actor }}
-        💬 ${{ github.event.head_commit.message }}
+        <div>
+          <h4>❌❌ Deployment Failed ❌❌</h4>
+          <p>Environment: <b>Staging</b></p>
+          <p>Project: <b>NextJS</b></p>
+          <p>Actor: <b>${{ github.actor }}</b></p>
+          <p>Commit Message: <b>${{ github.event.head_commit.message }}</b></p>
+        </div>

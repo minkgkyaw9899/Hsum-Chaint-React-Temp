@@ -1,8 +1,27 @@
 services:
-  app:
+  app1:
     image: ghcr.io/minkgkyaw9899/hsumchaint_next:latest
     restart: always
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     environment:
       - NODE_ENV=production
+
+  app2:
+    image: ghcr.io/minkgkyaw9899/hsumchaint_next:latest
+    restart: always
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app1
+      - app2
